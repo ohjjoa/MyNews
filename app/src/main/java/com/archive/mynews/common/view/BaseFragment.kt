@@ -2,7 +2,7 @@ package com.archive.mynews.common.view
 
 import androidx.fragment.app.Fragment
 
-abstract class BaseFragment(layout: Int) : Fragment(layout), BaseContract.View {
+open class BaseFragment(layout: Int) : Fragment(layout), BaseContract.View {
 
     override fun showIndicator() {
         activity?.let {

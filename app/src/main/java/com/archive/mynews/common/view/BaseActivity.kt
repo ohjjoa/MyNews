@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.archive.mynews.R
 
 @SuppressLint("Registered")
-abstract class BaseActivity : AppCompatActivity(), BaseContract.View {
+open class BaseActivity : AppCompatActivity(), BaseContract.View {
 
     var busyFlg = false
         private set

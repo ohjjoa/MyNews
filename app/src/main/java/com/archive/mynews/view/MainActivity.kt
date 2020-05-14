@@ -1,27 +1,15 @@
 package com.archive.mynews.view
 
-import android.animation.ObjectAnimator
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.viewpager.widget.ViewPager
 import com.archive.mynews.R
+import com.archive.mynews.common.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_everything.*
 
-class MainActivity : AppCompatActivity(), ChangeCountryDialogFragment.ChangeCountryListener {
-
-    var isKeyboardShowing = false
-    var keypadBaseHeight = 0
-
-    private val contentAnimDuration = 300L
-    private val contentAnimDelay = 400L
+class MainActivity : BaseActivity(), ChangeCountryDialogFragment.ChangeCountryListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,39 +59,12 @@ class MainActivity : AppCompatActivity(), ChangeCountryDialogFragment.ChangeCoun
         //Toast.makeText(this, "국가변경 완료", Toast.LENGTH_SHORT).show()
         // TODO: 국가변경 완료됐으므로 화면 갱신
         // TODO: TopHeadingFragment한테 갱신하라고 연락하기
+        showIndicator()
         val fragment = supportFragmentManager.fragments[viewPager.currentItem]
         if (fragment is TopHeadingFragment) {
+            hideIndicator()
             fragment.refresh()
         }
     }
 
-//    private fun onGlobalLayout() {
-//        val r = Rect()
-//        rootView.getWindowVisibleDisplayFrame(r)
-//        val screenHeight: Int = rootView.rootView.height
-//        val keypadHeight: Int = screenHeight - r.bottom
-//        if (keypadBaseHeight == 0) {
-//            keypadBaseHeight = keypadHeight
-//        }
-//        if (keypadHeight > screenHeight * 0.15) {
-//            if (!isKeyboardShowing) {
-//                isKeyboardShowing = true
-//                rootView.setPadding(0, 0, 0, keypadHeight)
-//                val height: Int = screenHeight - keypadBaseHeight
-//            }
-//        }
-//    }
-
-//    private fun animateContentHeight(params: ViewGroup.MarginLayoutParams, targetMargin: Int) {
-//        val paramsAnimator = ObjectAnimator.ofInt(params.bottomMargin, targetMargin).apply {
-//            duration = contentAnimDuration
-//            interpolator = FastOutSlowInInterpolator()
-//            startDelay = contentAnimDelay
-//        }
-//        paramsAnimator.addUpdateListener {
-//            params.bottomMargin = it.animatedValue as Int
-//            rootView.layoutParams = params
-//        }
-//        paramsAnimator.start()
-//    }
 }

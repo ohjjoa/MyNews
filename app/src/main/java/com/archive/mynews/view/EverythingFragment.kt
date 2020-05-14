@@ -18,6 +18,7 @@ import com.archive.mynews.api.NewsError
 import com.archive.mynews.api.NewsRepository
 import com.archive.mynews.api.NewsResponse
 import com.archive.mynews.api.Result
+import com.archive.mynews.common.view.BaseFragment
 import kotlinx.android.synthetic.main.fragment_everything.*
 import kotlinx.android.synthetic.main.fragment_everything.view.*
 import java.lang.String
@@ -26,7 +27,7 @@ import java.lang.String
 /**
  * A simple [Fragment] subclass.
  */
-class EverythingFragment : Fragment() {
+class EverythingFragment : BaseFragment(R.layout.fragment_top_heading) {
     lateinit var everythingRecyclerView : RecyclerView
     private lateinit var adapter : EverythingAdapter
     private var page = 1
@@ -52,6 +53,7 @@ class EverythingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (newsSearch != null) {
+            showIndicator()
             newsSearch.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_SEARCH -> {
@@ -61,9 +63,11 @@ class EverythingFragment : Fragment() {
                         page = 1
                         keyword = newsSearch.text.toString()
                         search()
+                        hideIndicator()
                     }
 
                     else -> {
+                        showIndicator()
                         Toast.makeText(context, "검색실패", Toast.LENGTH_SHORT).show()
                         return@OnEditorActionListener false
                     }
@@ -72,6 +76,7 @@ class EverythingFragment : Fragment() {
             })
         }
 
+        showIndicator()
         recycler_everything.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -80,18 +85,14 @@ class EverythingFragment : Fragment() {
                         override fun onSuccess(response: NewsResponse) {
                             adapter.addArticleList(response.articles)
                             page += 1
+                            hideIndicator()
                         }
 
                         override fun onFailure(error: NewsError) {
-
+                            hideIndicator()
                         }
                     })
                 }
-            }
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
             }
         })
     }
@@ -111,16 +112,19 @@ class EverythingFragment : Fragment() {
 //            adapter.addArticleList(filteredList)
 //        }
 
+        showIndicator()
         NewsRepository.getKeywordNews(keyword, page = page, callback = object : Result<NewsResponse> {
             override fun onSuccess(response: NewsResponse) {
                 Toast.makeText(context, "검색성공", Toast.LENGTH_SHORT).show()
                 recycler_everything.scrollToPosition(0)
                 adapter.replaceArticleList(response.articles)
                 page += 1
+                hideIndicator()
             }
 
             override fun onFailure(error: NewsError) {
                 Toast.makeText(context, "검색실패", Toast.LENGTH_SHORT).show()
+                hideIndicator()
             }
         })
     }
