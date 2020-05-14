@@ -1,32 +1,31 @@
 package com.archive.mynews.view
 
+import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.viewpager.widget.ViewPager
 import com.archive.mynews.R
-import com.archive.mynews.api.NewsError
-import com.archive.mynews.api.NewsRepository
-import com.archive.mynews.api.NewsResponse
-import com.archive.mynews.api.Result
 import kotlinx.android.synthetic.main.activity_main.*
-
+import kotlinx.android.synthetic.main.fragment_everything.*
 
 class MainActivity : AppCompatActivity(), ChangeCountryDialogFragment.ChangeCountryListener {
 
-    //private lateinit var adapter : CountryAdapter
+    var isKeyboardShowing = false
+    var keypadBaseHeight = 0
+
+    private val contentAnimDuration = 300L
+    private val contentAnimDelay = 400L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        //adapter = CountryAdapter()
 
         TopHeadingAdapter.ViewHolder(viewPager)
 
@@ -53,6 +52,10 @@ class MainActivity : AppCompatActivity(), ChangeCountryDialogFragment.ChangeCoun
                 (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).also {
                     it.hideSoftInputFromWindow(window.currentFocus!!.windowToken, 0)
                 }
+
+                if (position != 1) {
+                    // 키보드 처리
+                }
             }
 
         })
@@ -73,4 +76,34 @@ class MainActivity : AppCompatActivity(), ChangeCountryDialogFragment.ChangeCoun
             fragment.refresh()
         }
     }
+
+//    private fun onGlobalLayout() {
+//        val r = Rect()
+//        rootView.getWindowVisibleDisplayFrame(r)
+//        val screenHeight: Int = rootView.rootView.height
+//        val keypadHeight: Int = screenHeight - r.bottom
+//        if (keypadBaseHeight == 0) {
+//            keypadBaseHeight = keypadHeight
+//        }
+//        if (keypadHeight > screenHeight * 0.15) {
+//            if (!isKeyboardShowing) {
+//                isKeyboardShowing = true
+//                rootView.setPadding(0, 0, 0, keypadHeight)
+//                val height: Int = screenHeight - keypadBaseHeight
+//            }
+//        }
+//    }
+
+//    private fun animateContentHeight(params: ViewGroup.MarginLayoutParams, targetMargin: Int) {
+//        val paramsAnimator = ObjectAnimator.ofInt(params.bottomMargin, targetMargin).apply {
+//            duration = contentAnimDuration
+//            interpolator = FastOutSlowInInterpolator()
+//            startDelay = contentAnimDelay
+//        }
+//        paramsAnimator.addUpdateListener {
+//            params.bottomMargin = it.animatedValue as Int
+//            rootView.layoutParams = params
+//        }
+//        paramsAnimator.start()
+//    }
 }

@@ -1,9 +1,11 @@
 package com.archive.mynews.view
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +14,9 @@ import com.archive.mynews.api.NewsError
 import com.archive.mynews.api.NewsRepository
 import com.archive.mynews.api.NewsResponse
 import com.archive.mynews.api.Result
+import kotlinx.android.synthetic.main.fragment_everything.*
 import kotlinx.android.synthetic.main.fragment_top_heading.*
 import kotlinx.android.synthetic.main.fragment_top_heading.view.*
-import okhttp3.internal.notifyAll
 
 
 /**
@@ -25,6 +27,9 @@ class TopHeadingFragment : Fragment() {
     lateinit var topHeadingRecyclerView : RecyclerView
     private lateinit var adapter : TopHeadingAdapter
     private var page = 1
+
+    var isKeyboardShowing = false
+    var keypadBaseHeight = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -84,4 +89,5 @@ class TopHeadingFragment : Fragment() {
             }
         })
     }
+
 }
